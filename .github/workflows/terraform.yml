@@ -36,12 +36,12 @@ jobs:
     - name: Terraform Plan
       run: terraform plan -input=false
       env:
-        TF_VAR_ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+        TF_VAR_ssh_private_key_path: ${{ secrets.SSH_PRIVATE_KEY }}
         TF_VAR_ssh_host: ${{ secrets.SSH_HOST }}
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false
       env:
-        TF_VAR_ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+        TF_VAR_ssh_private_key_path: ${{ secrets.SSH_PRIVATE_KEY }}
         TF_VAR_ssh_host: ${{ secrets.SSH_HOST }}
