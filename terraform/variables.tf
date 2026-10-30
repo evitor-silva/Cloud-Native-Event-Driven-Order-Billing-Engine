@@ -4,7 +4,7 @@ variable "ssh_user" {
   default     = "ubuntu"
 }
 
-variable "ssh_private_key" {
+variable "ssh_private_key_path" {
   type      = string
   sensitive = true
 }
