@@ -43,6 +43,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Build with Gradle
+        working-directory: ${{ matrix.service.context }}
+        run: ./gradlew build -x test
+        
       # Construir e enviar a imagem
       - name: Build and push ${{ matrix.service.name }}
         uses: docker/build-push-action@v5
