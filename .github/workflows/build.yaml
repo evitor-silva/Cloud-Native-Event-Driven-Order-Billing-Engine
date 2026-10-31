@@ -43,6 +43,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Grant execute permission for gradlew
+        working-directory: ${{ matrix.service.context }}
+        run: chmod +x gradlew
+
       - name: Build with Gradle
         working-directory: ${{ matrix.service.context }}
         run: ./gradlew build -x test
