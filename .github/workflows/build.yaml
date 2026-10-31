@@ -14,13 +14,13 @@ jobs:
         service:
           - name: producer-billing
             context: ./services/producer-billing
-            dockerfile: ./services/producer-billing/src/docker/Dockerfile.jvm
+            dockerfile: ./services/producer-billing/src/main/docker/Dockerfile.jvm
           - name: service-inventory
             context: ./services/consumers/inventory-service/
-            dockerfile: ./services/consumers/inventory-service/src/docker/Dockerfile.jvm
+            dockerfile: ./services/consumers/inventory-service/src/main/docker/Dockerfile.jvm
           - name: service-order
             context: ./services/consumers/order-service/
-            dockerfile: ./services/consumers/order-service/src/docker/Dockerfile.jvm
+            dockerfile: ./services/consumers/order-service/src/main/docker/Dockerfile.jvm
 
     steps:
       - name: Checkout code
