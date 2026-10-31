@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: kafka-broker
-          image: docker.io/bitnamilegacy/kafka:latest
+          image: apache/kafka:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9092
