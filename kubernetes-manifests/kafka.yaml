@@ -21,6 +21,7 @@ spec:
       containers:
         - name: zookeeper
           image: docker.io/bitnami/zookeeper:3.8.3
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 2181
           env:
@@ -57,6 +58,7 @@ spec:
       containers:
         - name: kafka-broker
           image: docker.io/bitnami/kafka:3.4.0
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9092
           env:
