@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: kafka-broker
-          image: apache/kafka:4.0.0        # fixe a versão em vez de latest
+          image: apache/kafka:4.3.0       
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9092

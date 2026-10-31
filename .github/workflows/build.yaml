@@ -1,0 +1,57 @@
+name: Build and Push 3 Quarkus Services
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      fail-fast: false 
+      matrix:
+        service:
+          - name: producer-billing
+            context: ./services/producer-billing
+            dockerfile: ./services/producer-billing/src/docker/Dockerfile.jvm
+          - name: service-inventory
+            context: ./services/consumers/inventory-service/
+            dockerfile: ./services/consumers/inventory-service/src/docker/Dockerfile.jvm
+          - name: service-order
+            context: ./services/consumers/order-service/
+            dockerfile: ./services/consumers/order-service/src/docker/Dockerfile.jvm
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Extrair metadados (gerar tags automaticamente com base no nome do serviço)
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service.name }}
+
+      - name: Log in to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Construir e enviar a imagem
+      - name: Build and push ${{ matrix.service.name }}
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.service.context }}
+          file: ${{ matrix.service.dockerfile }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Ativar cache para acelerar builds subsequentes
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

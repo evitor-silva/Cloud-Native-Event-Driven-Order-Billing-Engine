@@ -1,9 +1,11 @@
 name: 'Terraform'
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
+  workflow_run:
+    workflows: ["Build and Push 3 Quarkus Services"] 
+    types:
+      - completed
+    branches: [main]
 
 permissions:
   contents: read
