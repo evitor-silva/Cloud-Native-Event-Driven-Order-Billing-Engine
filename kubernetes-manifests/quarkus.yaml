@@ -1,0 +1,136 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: quarkus-app
+---
+# 1. Aplicação: producer-billing
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: producer-billing
+  namespace: quarkus-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: producer-billing
+  template:
+    metadata:
+      labels:
+        app: producer-billing
+    spec:
+      containers:
+        - name: producer-billing
+          image: vitoresbr/producer-billing:main
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: producer-billing-service
+  namespace: quarkus-app
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: producer-billing
+---
+# 2. Aplicação: service-order
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-order
+  namespace: quarkus-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-order
+  template:
+    metadata:
+      labels:
+        app: service-order
+    spec:
+      containers:
+        - name: service-order
+          image: vitoresbr/service-order:main
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-order-service
+  namespace: quarkus-app
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: service-order
+---
+# 3. Terceira Aplicação Quarkus (Exemplo)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terceira-api
+  namespace: quarkus-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: terceira-api
+  template:
+    metadata:
+      labels:
+        app: terceira-api
+    spec:
+      containers:
+        - name: terceira-api
+          image: vitoresbr/service-inventory:main
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: terceira-api-service
+  namespace: quarkus-app
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: terceira-api
