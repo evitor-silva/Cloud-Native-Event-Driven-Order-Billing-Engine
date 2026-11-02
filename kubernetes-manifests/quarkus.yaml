@@ -64,7 +64,7 @@ spec:
         app: service-order
     spec:
       containers:
-        - name: service-order
+        - name: microservice-order
           image: vitoresbr/service-order:main
           imagePullPolicy: Always
           ports:
@@ -108,7 +108,7 @@ spec:
         app: terceira-api
     spec:
       containers:
-        - name: terceira-api
+        - name: microservice-inventory
           image: vitoresbr/service-inventory:main
           imagePullPolicy: Always
           ports:
